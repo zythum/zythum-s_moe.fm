@@ -1,0 +1,20 @@
+{
+	"name": "zythum's Moe.fm",
+	"version": "1",
+	"permissions": ["zythum's moe.fm"],
+	"browser_action": {
+	  "default_icon": "images/icon64.png"
+	},
+	"content_scripts": [
+	    {
+	      "matches": ["*://*/*","<all_urls>"],
+	      "js": ["script/kissy-min.1.2.0.js", "script/content_script.js"],
+	      "run_at":"document_end"
+	    }
+  	],
+  	"homepage_url": "http://zythum.free.bg/moefm/",
+  	"options_page": "options.html",
+	"icons": {"48": "images/icon128.png"},
+	"background_page": "background.html",
+	"permissions": ["tabs","notifications","*://moe.fm/*", "*://*.moefou.org/*", "*://moefou.org/*"]
+}

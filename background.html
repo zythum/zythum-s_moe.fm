@@ -1,0 +1,186 @@
+<script type="text/javascript" src="script/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+var audio = new Audio(),
+	e = 'addEventListener',
+	songList = [],
+	nowPlaySong = {},
+	nowPlaySongInfo = {},
+	nexturl = 'http://moe.fm/listen/playlist',
+	logoVisiable;
+
+if(window.localStorage['logoVisiable'] == undefined){
+	logoVisiable = true;
+	window.localStorage['logoVisiable'] = logoVisiable;
+}
+	
+//songList 
+songList._ = {};
+songList._.add2List = function(fn){
+	$.ajax({
+		url:nexturl,
+		type:'post',
+		dataType:'json',
+		success:function(data){
+			console.log(data);
+			for(var i=0;i<data.playlist.length;i++){
+				songList.push(data.playlist[i]);
+			}
+			nexturl = data.info.next_url;
+			fn();
+		},
+		error:function(data){
+			console.log(data);
+			songList._.add2List();
+		}
+	});
+};
+songList._.hasSong = function(){
+	return !!songList.length;
+};
+songList._.postSong = function(){
+	return songList.shift();
+};
+//audio
+audio._ = {};
+audio._.playedTimePst = function(){
+	return audio.currentTime / audio.duration;
+}
+audio._.setplayedTimePst = function(n){
+	audio.currentTime = audio.duration*n;
+}
+audio._.start = function(){
+	if(songList._.hasSong()){
+		nowPlaySongInfo = songList._.postSong();
+		audio.src = nowPlaySongInfo.url;
+	}else{
+		songList._.add2List(function(){
+			nowPlaySongInfo = songList._.postSong();
+			audio.src = nowPlaySongInfo.url;
+		});
+	}
+	if(nowPlaySongInfo['fav_sub'] && nowPlaySongInfo['fav_sub']['fav_type'] == 1){
+		nowPlaySong._.isliked = true;
+	}else nowPlaySong._.isliked = false;
+}
+audio._.nextSong = function(){
+	audio._.start();
+}
+audio._.pop = function(){
+	if(audio.paused) audio.play();
+	else audio.pause();
+	return audio.paused;
+}
+audio[e]('canplay', audio.play);
+audio[e]('ended', audio._.nextSong);
+audio[e]('error', audio._.nextSong);
+//nowPlaySong
+nowPlaySong._ = {};
+nowPlaySong._.isliked = false;
+nowPlaySong._.show = function(){
+	var notification = webkitNotifications.createNotification(
+	  nowPlaySongInfo['cover']['small'],
+	  nowPlaySongInfo['title'],
+	  nowPlaySongInfo['wiki_title']
+	);
+	notification.show();
+	setTimeout(function(){notification.cancel();},4000);
+}
+audio[e]('canplay', nowPlaySong._.show);
+nowPlaySong._.like = function(){
+	$.ajax({
+		url:'http://moe.fm/ajax/fav',
+		type:'post',
+		data:{
+			'status[s_content]':'',
+			'fav_data[fav_type]':'1',
+			'fav_data[obj_id]':nowPlaySongInfo['sub_id'],
+			'fav_data[obj_type]':'song',
+			'fav_data[delete]':'0'
+		},
+		dataType:'json',
+		success:function(data){
+			console.log(data);
+			nowPlaySong._.isliked = true;
+		}
+	});
+}
+nowPlaySong._.unlike = function(){
+	$.ajax({
+		url:'http://moe.fm/ajax/fav',
+		type:'post',
+		data:{
+			'status[s_content]':'',
+			'fav_data[fav_type]':'1',
+			'fav_data[obj_id]':nowPlaySongInfo['sub_id'],
+			'fav_data[obj_type]':'song',
+			'fav_data[delete]':'1'
+		},
+		dataType:'json',
+		success:function(data){
+			console.log(data);
+			nowPlaySong._.isliked = false;
+		}
+	});
+}
+nowPlaySong._.tolike = function(){
+	if(nowPlaySong._.isliked){
+		nowPlaySong._.unlike();
+	}else{
+		nowPlaySong._.like();	
+	}
+}
+nowPlaySong._.del = function(){
+	$.ajax({
+		url:'http://moe.fm/ajax/fav',
+		type:'post',
+		data:{
+			'status[s_content]':'',
+			'fav_data[fav_type]':'2',
+			'fav_data[obj_id]':nowPlaySongInfo['sub_id'],
+			'fav_data[obj_type]':'song',
+			'fav_data[delete]':'0'
+		},
+		dataType:'json',
+		success:function(data){
+			console.log(data);
+			audio._.nextSong();
+		}
+	});
+}
+//port
+chrome.extension.onConnect.addListener(function(port) {
+  port.onMessage.addListener(function(msg) {
+    //port.postMessage({'ok':'ok'});
+    //console.log(msg);
+    if(msg['cmd'] == 'get' ){
+    	var sender = {
+	    	songInfo : nowPlaySongInfo,
+	    	playedTime : audio._.playedTimePst(),
+	    	ispaused : audio.paused,
+	    	logoVisiable : logoVisiable,
+	    	isliked : nowPlaySong._.isliked
+	    };
+    	port.postMessage(sender);
+    } else if( msg['cmd'] == 'set'){
+    	switch(msg['type']){
+    		case 'cTime' : audio._.setplayedTimePst(msg['cTime']);break;
+    		case 'next'  : audio._.nextSong();break;
+    		case 'pop'   : audio._.pop();break;
+    		case 'like'  : nowPlaySong._.tolike();break;
+    		case 'del'   : nowPlaySong._.del();break;
+    	}
+    }
+  });
+});
+chrome.browserAction.onClicked.addListener(function(){
+	logoVisiable = !logoVisiable;
+	window.localStorage['logoVisiable'] = logoVisiable;
+});
+chrome.browserAction.setBadgeBackgroundColor({color:[53,122,232,255]});
+var face = [' ^_^ ',' > < ',' o_o ',' @_@ ',' o_O ',' XD ',' T_T ',' -_-b ',' =_=" ',' =3= ',' ^o^ ',' ._/.# ',' Orz '];
+setInterval(function(){
+	chrome.browserAction.setBadgeText({text:face[Math.random()*face.length | 0]});
+},2000);
+
+audio._.start();
+</script>
