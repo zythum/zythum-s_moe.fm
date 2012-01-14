@@ -10,6 +10,7 @@ var d = document,
 	line = d[c]('div'),
 	lineBtn = d[c]('div'),
 	logo = d[c]('div'),
+	logofix = d[c]('div'),
 	control = d[c]('div'),
 	like = d[c]('div'),
 	pop = d[c]('div'),
@@ -21,10 +22,11 @@ var d = document,
 	port = chrome.extension.connect({name: "zmoe"});
 frame[s][ct] += ';position:fixed;top:0;left:0;right:0;height:3px;z-index:10000;-webkit-transition:height 0.3s linear;cursor:pointer;font-family:arial,sans-serif;';
 
-logo[s][ct] += ';background-color:#3D9400;background-repeat:no-repeat;background-image:url(http://2.agreatbeginning.sinaapp.com/images/logo.png),-webkit-linear-gradient(top,#3D9400,#398A00);border: 1px solid #29691D;text-shadow: 0 1px rgba(0, 0, 0, 0.1);position:absolute;top:0;left:0;width:100px;height:26px;line-height:26px;text-align:center;font-weight:bold;box-shadow:0px 0px 3px #000;color:#fff;font-size:20px;border-bottom-right-radius:3px;-webkit-transition:top 0.5s ease;';
-
-control[s][ct] += ';background-color:#3D9400;background-image:-webkit-linear-gradient(top,#3D9400,#398A00);border: 1px solid #29691D;text-shadow: 0 1px rgba(0, 0, 0, 0.1);;position:absolute;top:0;left:0;width:100px;height:26px;line-height:26px;text-align:center;font-weight:bold;box-shadow:0px 0px 3px #000;color:#fff;font-size:25px;border-bottom-right-radius:3px;-webkit-transform-origin: 0 0;-webkit-transform:rotateX(90deg);-webkit-transition:-webkit-transform 0.5s ease;';
-like[s][ct]    += ';float:left;width:19px;height:20px;margin:3px;background-image:url(http://2.agreatbeginning.sinaapp.com/images/btn.png);background-position:0px -89px; background-position:0px -67px;';
+//logo[s][ct] += ';background-color:#3D9400;background-repeat:no-repeat;background-image:url(http://2.agreatbeginning.sinaapp.com/images/logo.png),-webkit-linear-gradient(top,#3D9400,#398A00);border: 1px solid #29691D;text-shadow: 0 1px rgba(0, 0, 0, 0.1);position:absolute;top:0;left:0;width:98px;height:26px;line-height:26px;text-align:center;font-weight:bold;box-shadow:0px 0px 3px #000;color:#fff;font-size:20px;border-bottom-right-radius:3px;-webkit-transform-origin: 0 0;-webkit-transform:rotateX(90deg);-webkit-transition:-webkit-transform 0.5s ease;';
+logo[s][ct] += ';background-repeat:no-repeat;background-image:url(http://2.agreatbeginning.sinaapp.com/images/logo_moe.png);position:absolute;top:0;left:0;width:100px;height:177px;line-height:26px;text-align:center;font-weight:bold;color:#fff;font-size:20px;-webkit-transform-origin: 0 0;-webkit-transform:rotateX(90deg);-webkit-transition:-webkit-transform 0.5s ease;';
+logofix[s][ct] += ';background-color:#3D9400;height:3px;position:absolute;top:0;left:0;width:100px;box-shadow:0px 0px 3px #000;border-radius:2px;';
+control[s][ct] += ';background-color:#3D9400;background-image:-webkit-linear-gradient(top,#3D9400,#398A00);border: 1px solid #29691D;text-shadow: 0 1px rgba(0, 0, 0, 0.1);;position:absolute;top:0;left:0;width:98px;height:26px;line-height:26px;text-align:center;font-weight:bold;box-shadow:0px 0px 3px #000;color:#fff;font-size:25px;border-bottom-right-radius:3px;-webkit-transform-origin: 0 0;-webkit-transform:rotateX(90deg);-webkit-transition:-webkit-transform 0.5s ease;';
+like[s][ct]    += ';float:left;width:19px;height:20px;margin:3px 2px;background-image:url(http://2.agreatbeginning.sinaapp.com/images/btn.png);background-position:0px -89px; background-position:0px -67px;';
 pop[s][ct]     += ';float:left;width:19px;height:20px;margin:3px;background-image:url(http://2.agreatbeginning.sinaapp.com/images/btn.png);background-position:1px 0px;  background-position:0px -25px;';
 del[s][ct]  += ';float:left;width:19px;height:20px;margin:3px;background-image:url(http://2.agreatbeginning.sinaapp.com/images/btn.png);background-position:0px -111px;';
 next[s][ct]    += ';float:left;width:19px;height:20px;margin:3px;background-image:url(http://2.agreatbeginning.sinaapp.com/images/btn.png);background-position:-1px -44px;';
@@ -32,14 +34,15 @@ next[s][ct]    += ';float:left;width:19px;height:20px;margin:3px;background-imag
 line[s][ct] += ';position:absolute;bottom:0;left:100px;right:0;height:15px;background:-webkit-linear-gradient(top,#222 0%, #444 20%, #444 80%, #222 100%);';
 lineBtn[s][ct] += ';background-color:#357AE8;background-image:-webkit-linear-gradient(top,#4D90FE,#357AE8);height:95%;width:0%;-webkit-transition:width 0.5s linear;box-shadow:0px 0px 5px #357AE8;border-top-right-radius:1px;border-bottom-right-radius:1px;';
 
-ntc[s][ct] += 'position:absolute;top:0;left:2px;display:none;opacity:0;-webkit-transition:opacity 0.5s ease;background:#fff;text-decoration:none;';
+ntc[s][ct] += 'position:absolute;top:0;left:1px;display:none;opacity:0;-webkit-transition:opacity 0.5s ease;background:#fff;text-decoration:none;';
 ntcTitle[s][ct] += 'position:absolute;bottom:3px;right:3px;left:3px;text-align:center;background-image:-webkit-linear-gradient(left,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.5) 100%);color:#fff;font-size:14px;line-height:100%;padding:5px;box-shadow:0px 0px 1px #000;';
 ntcImage[s][ct] += 'display:block;border:3px solid #357AE8;border-radius:2px;box-shadow:1px 1px 3px #000;';
 
 d[b][a](frame);
+frame[a](logofix);
+frame[a](logo);
 frame[a](ntc);
 frame[a](line);
-frame[a](logo);
 frame[a](control);
 control[a](like);
 control[a](pop);
@@ -48,21 +51,40 @@ control[a](next);
 line[a](lineBtn);
 ntc[a](ntcTitle);
 ntc[a](ntcImage);
+frame._ = {};
+frame._.getIndexMax = function(){
+	var node = document.body.childNodes, max = 0;
+	for(var i = 0;i<node.length;i++){
+		if(node[i][s] && node[i][s]['zIndex']){			
+			max = node[i][s]['zIndex'];
+		}
+	}
+	return max;
+}
+frame[s]['zIndex'] = frame._.getIndexMax()+1;
 //logo
 //logo.innerHTML = 'moe.fm';
 logo._ = {};
 logo._.visiable = true;
 logo._.show = function(){
-	logo[s]['top'] = '0';
+	logo[s][ct] += ';-webkit-transform:rotateX(0);';
 }
 logo._.hide = function(){
-	logo[s]['top'] = '-25px';
+	logo[s][ct] += ';-webkit-transform:rotateX(90deg);';
 }
 logo._.vis = function(b){
 	if(logo._.visiable != b){
 		logo._.visiable = b;
-		if(logo._.visiable) logo._.show();
-		else logo._.hide();
+		logo._.hide();
+		setTimeout(function(){
+			switch(b){
+				case 0 : break;
+				case 1 : logo[s][ct] += ';background-color:#3D9400;background-repeat:no-repeat;background-image:url(http://2.agreatbeginning.sinaapp.com/images/logo.png),-webkit-linear-gradient(top,#3D9400,#398A00);border: 1px solid #29691D;text-shadow: 0 1px rgba(0, 0, 0, 0.1);position:absolute;top:0;left:0;width:98px;height:26px;line-height:26px;text-align:center;font-weight:bold;box-shadow:0px 0px 3px #000;color:#fff;font-size:20px;border-bottom-right-radius:3px;-webkit-transform-origin: 0 0;-webkit-transform:rotateX(90deg);-webkit-transition:-webkit-transform 0.5s ease;';setTimeout(function(){logo._.show()},10);break;
+				case 2 : logo[s][ct] += ';background-repeat:no-repeat;background-image:url(http://2.agreatbeginning.sinaapp.com/images/logo_moe.png);position:absolute;top:0;left:0;width:100px;height:177px;line-height:26px;text-align:center;font-weight:bold;color:#fff;font-size:20px;-webkit-transform-origin: 0 0;-webkit-transform:rotateX(90deg);-webkit-transition:-webkit-transform 0.5s ease;background-color:transparent;border:0;box-shadow:none;';setTimeout(function(){logo._.show()},10);break;
+			}
+		},500);
+		//if(logo._.visiable) logo._.show();
+		//else logo._.hide();
 	}
 }
 // control
@@ -168,7 +190,7 @@ port.onMessage.addListener(function(msg){
 	//console.log(msg);
 });
 setInterval(function(){port.postMessage({'cmd':'get'});},500);
-
+port.postMessage({'cmd':'get'});
 
 
 

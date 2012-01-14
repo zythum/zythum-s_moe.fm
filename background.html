@@ -9,7 +9,7 @@ var audio = new Audio(),
 	logoVisiable;
 
 if(window.localStorage['logoVisiable'] == undefined){
-	logoVisiable = true;
+	logoVisiable = 1;
 	window.localStorage['logoVisiable'] = logoVisiable;
 }
 	
@@ -73,6 +73,7 @@ audio._.pop = function(){
 audio[e]('canplay', audio.play);
 audio[e]('ended', audio._.nextSong);
 audio[e]('error', audio._.nextSong);
+audio[e]('stalled', audio._.nextSong);
 //nowPlaySong
 nowPlaySong._ = {};
 nowPlaySong._.isliked = false;
@@ -173,7 +174,10 @@ chrome.extension.onConnect.addListener(function(port) {
   });
 });
 chrome.browserAction.onClicked.addListener(function(){
-	logoVisiable = !logoVisiable;
+	var arr = [0,1,2],
+		n = parseInt(logoVisiable) + 1;
+	if(isNaN(n)) n = 0;
+	logoVisiable = (n >= arr.length ? arr.length - n : n);
 	window.localStorage['logoVisiable'] = logoVisiable;
 });
 chrome.browserAction.setBadgeBackgroundColor({color:[53,122,232,255]});
